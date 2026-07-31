@@ -1,0 +1,1 @@
+Upload all files and the icons folder to the root of your GitHub repository. Replace the old single index.html. GitHub Pages will update automatically.
