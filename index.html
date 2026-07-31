@@ -16,7 +16,7 @@
   <div class="brand">
     <span class="eyebrow">A personal recipe collection</span>
     <h1>Charlie’s Cookbook</h1>
-    <p>Family favorites, meals to try, and a better answer to “What’s for dinner?”</p>
+    <p>Our family’s favorite recipes, gathered over the years and kept in one beautiful place.</p>
   </div>
   <button id="installBtn" class="outline-btn hidden">Install App</button>
 </header>
@@ -31,6 +31,14 @@
 
 <main>
 <section id="home" class="view active">
+  <section class="home-search">
+    <label for="homeSearch">What would you like to cook?</label>
+    <div class="home-search-row">
+      <input id="homeSearch" type="search" placeholder="Search chicken, cabbage, pasta, soup…">
+      <button id="homeSearchBtn" class="primary-btn">Search Recipes</button>
+    </div>
+  </section>
+
   <section class="featured">
     <div class="featured-art" aria-hidden="true"><span>CC</span></div>
     <div class="featured-copy">
@@ -52,7 +60,12 @@
 
   <section class="content-section">
     <div class="section-heading"><div><span class="eyebrow dark">Browse</span><h2>Recipe Categories</h2></div></div>
-    <div id="categoryGrid" class="category-grid"></div>
+    <div id="categoryGrid" class="category-grid visual-categories"></div>
+  </section>
+
+  <section id="continueSection" class="content-section hidden">
+    <div class="section-heading"><div><span class="eyebrow dark">Pick up where you left off</span><h2>Continue Cooking</h2></div></div>
+    <div id="continueGrid" class="recipe-grid"></div>
   </section>
 
   <section class="content-section">
