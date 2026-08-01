@@ -122,3 +122,23 @@ footer{background:var(--navy);color:#dbe5ee;text-align:center;padding:24px;font-
 .content-section{margin-top:38px}.recipe-grid{gap:22px}.card{border-radius:18px}
 @media(max-width:820px){.featured{min-height:0}.featured-art{min-height:280px}}
 @media(max-width:620px){.featured-art{min-height:220px}.category-card{min-height:165px!important}.card-thumb{height:210px}}
+
+.card-thumb.no-photo{
+  display:grid;
+  place-items:center;
+  background:
+    linear-gradient(135deg,rgba(16,42,67,.98),rgba(51,78,104,.92)),
+    #102a43;
+}
+.no-photo-mark{
+  width:88px;
+  height:88px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(216,180,90,.72);
+  border-radius:50%;
+  color:#d8b45a;
+  font:700 .88rem/1 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}

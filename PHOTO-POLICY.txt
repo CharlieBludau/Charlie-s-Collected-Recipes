@@ -1,0 +1,12 @@
+PHOTO POLICY
+
+- Homepage and category photography uses unique Unsplash images.
+- No category image is reused for another category.
+- Recipe cards request the original source page's preview image.
+- If a recipe has no usable source preview, the card displays an elegant
+  navy no-photo treatment rather than repeating an unrelated food photo.
+- Adobe Stock images were not embedded because they require an active license
+  through the site owner's Adobe account.
+
+Unsplash License:
+https://unsplash.com/license

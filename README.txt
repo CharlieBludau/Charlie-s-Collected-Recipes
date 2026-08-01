@@ -1,1 +1,1 @@
-Upload every file and the art and icons folders. Replace existing files, commit, wait for GitHub Pages, then press Ctrl+Shift+R. This version uses real Unsplash food photography instead of category cartoons.
+Upload every file and both folders (art and icons), replacing the existing site. This version removes repeated stock photos. Category and homepage photos are unique; recipe cards use their own source preview when available and otherwise show a clean navy no-photo card.
