@@ -1,122 +1,164 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#102a43">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Charlie's Cookbook">
-<title>Charlie’s Cookbook</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-192.svg">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0d2740">
+  <meta name="description" content="Charlie’s Cookbook — a curated family collection of favorite recipes.">
+  <meta property="og:title" content="Charlie’s Cookbook">
+  <meta property="og:description" content="Our family’s favorite recipes, gathered in one beautiful place.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="photos/hero.jpg">
+  <title>Charlie’s Cookbook</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header class="site-header">
-  <div class="brand">
-    <span class="eyebrow">A personal recipe collection</span>
-    <h1>Charlie’s Cookbook</h1>
-    <p>Our family’s favorite recipes, gathered over the years and kept in one beautiful place.</p>
-  </div>
-  <button id="installBtn" class="outline-btn hidden">Install App</button>
-</header>
-
-<nav class="main-nav">
-  <button data-view="home" class="active">Home</button>
-  <button data-view="recipes">Recipes</button>
-  <button data-view="favorites">Favorites</button>
-  <button data-view="planner">Planner</button>
-  <button data-view="shopping">Shopping</button>
-</nav>
-
-<main>
-<section id="home" class="view active">
-  <section class="home-search">
-    <label for="homeSearch">What would you like to cook?</label>
-    <div class="home-search-row">
-      <input id="homeSearch" type="search" placeholder="Search chicken, cabbage, pasta, soup…">
-      <button id="homeSearchBtn" class="primary-btn">Search Recipes</button>
+  <header class="topbar">
+    <a class="brand-lockup" href="#" data-view-link="home" aria-label="Charlie’s Cookbook home">
+      <span class="brand-mark">C</span>
+      <span><strong>Charlie’s Cookbook</strong><small>A family recipe collection</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <button data-view-link="home" class="active">Home</button>
+      <button data-view-link="recipes">Recipes</button>
+      <button data-view-link="favorites">Favorites</button>
+      <button data-view-link="planner">Planner</button>
+      <button data-view-link="shopping">Shopping</button>
+    </nav>
+    <div class="header-actions">
+      <button id="shareBtn" class="ghost-btn">Share</button>
+      <button id="installBtn" class="outline-btn hidden">Install</button>
     </div>
-  </section>
+  </header>
 
-  <section class="featured">
-    <div class="featured-art"><img id="featuredImage" src="photos/featured.jpg" alt="Featured family dinner photograph"></div>
-    <div class="featured-copy">
-      <span class="eyebrow dark">Featured from your collection</span>
-      <h2 id="featuredTitle">Loading your recipes…</h2>
-      <p id="featuredMeta"></p>
-      <div class="featured-actions">
-        <a id="featuredLink" class="primary-btn" target="_blank" rel="noopener">Open Recipe</a>
-        <button id="newFeatured" class="secondary-btn">Show Another</button>
-      </div>
-    </div>
-  </section>
+  <main>
+    <section id="home" class="view active">
+      <section class="hero">
+        <img src="photos/hero.jpg" alt="A welcoming family dining table">
+        <div class="hero-shade"></div>
+        <div class="hero-content">
+          <p class="kicker">Collected, cooked, and shared</p>
+          <h1>A beautiful answer to<br>“What’s for dinner?”</h1>
+          <p>Our family’s favorite recipes—organized for weeknights, weekends, celebrations, and everything in between.</p>
+          <div class="hero-search">
+            <input id="homeSearch" type="search" placeholder="Search chicken, pasta, soup, cabbage…">
+            <button id="homeSearchBtn" class="gold-btn">Search the collection</button>
+          </div>
+        </div>
+      </section>
 
-  <section class="quick-actions">
-    <button id="tonightBtn"><span>Tonight</span><strong>Pick dinner for me</strong></button>
-    <button data-jump="favorites"><span>Saved</span><strong>My favorites</strong></button>
-    <button data-jump="planner"><span>This week</span><strong>Plan meals</strong></button>
-  </section>
+      <section class="dashboard-strip">
+        <article><span id="recipeTotal">160</span><small>Collected recipes</small></article>
+        <article><span id="favoriteTotal">0</span><small>Your favorites</small></article>
+        <article><span id="ratingTotal">0</span><small>Recipes rated</small></article>
+        <button id="surpriseBtn"><small>Need an idea?</small><strong>Surprise me tonight →</strong></button>
+      </section>
 
-  <section class="content-section">
-    <div class="section-heading"><div><span class="eyebrow dark">Browse</span><h2>Recipe Categories</h2></div></div>
-    <div id="categoryGrid" class="category-grid visual-categories"></div>
-  </section>
+      <section class="editorial-feature">
+        <div class="feature-number">01</div>
+        <div class="feature-copy">
+          <p class="kicker dark">Tonight’s recommendation</p>
+          <h2 id="featuredTitle">Choosing something delicious…</h2>
+          <p id="featuredMeta"></p>
+          <div class="feature-actions">
+            <a id="featuredLink" class="navy-btn" target="_blank" rel="noopener">Open original recipe</a>
+            <button id="newFeatured" class="text-button">Choose another</button>
+          </div>
+        </div>
+        <div class="feature-note">
+          <span>Photography policy</span>
+          <p>Recipe cards never show an unrelated dish. A verified photo can be added later; until then, the editorial design stands on its own.</p>
+        </div>
+      </section>
 
-  <section id="continueSection" class="content-section hidden">
-    <div class="section-heading"><div><span class="eyebrow dark">Pick up where you left off</span><h2>Continue Cooking</h2></div></div>
-    <div id="continueGrid" class="recipe-grid"></div>
-  </section>
+      <section class="section-block">
+        <div class="section-heading">
+          <div><p class="kicker dark">Explore the collection</p><h2>Browse by category</h2></div>
+          <button class="text-button" data-view-link="recipes">View all recipes →</button>
+        </div>
+        <div id="categoryGrid" class="category-grid"></div>
+      </section>
 
-  <section class="content-section">
-    <div class="section-heading"><div><span class="eyebrow dark">Family picks</span><h2>Family Favorites</h2></div></div>
-    <div id="familyFavoritesGrid" class="recipe-grid"></div>
-  </section>
+      <section id="continueSection" class="section-block hidden">
+        <div class="section-heading">
+          <div><p class="kicker dark">Pick up where you left off</p><h2>Continue cooking</h2></div>
+        </div>
+        <div id="continueGrid" class="editorial-grid"></div>
+      </section>
 
-  <section class="content-section">
-    <div class="section-heading"><div><span class="eyebrow dark">Seasonal inspiration</span><h2>Comfort Food & Gathering</h2></div></div>
-    <div id="seasonalGrid" class="recipe-grid"></div>
-  </section>
+      <section class="section-block">
+        <div class="section-heading">
+          <div><p class="kicker dark">Curated for you</p><h2>Family table</h2></div>
+        </div>
+        <div id="familyGrid" class="editorial-grid"></div>
+      </section>
 
-  <section class="content-section">
-    <div class="section-heading"><div><span class="eyebrow dark">New to the collection</span><h2>Recently Added</h2></div></div>
-    <div id="recentGrid" class="recipe-grid"></div>
-  </section>
-</section>
+      <section class="section-block">
+        <div class="section-heading">
+          <div><p class="kicker dark">Newest additions</p><h2>Recently collected</h2></div>
+        </div>
+        <div id="recentGrid" class="editorial-grid"></div>
+      </section>
+    </section>
 
-<section id="recipes" class="view">
-  <div class="search-panel">
-    <label>Search all recipes<input id="search" type="search" placeholder="Recipe, source, cuisine, or tag"></label>
-    <label>Search by ingredient<input id="ingredientSearch" type="search" placeholder="Chicken, cabbage, rice…"></label>
-    <label>Category<select id="categoryFilter"><option value="">All categories</option></select></label>
-    <label>Protein<select id="proteinFilter"><option value="">All proteins</option></select></label>
-  </div>
-  <div class="section-heading">
-    <div><span class="eyebrow dark">Collection</span><h2 id="recipeHeading">All Recipes</h2><p id="recipeCount"></p></div>
-    <button id="clearFilters" class="text-btn">Clear filters</button>
-  </div>
-  <div id="recipeGrid" class="recipe-grid"></div>
-  <div id="empty" class="empty">No recipes match those filters.</div>
-</section>
+    <section id="recipes" class="view">
+      <header class="page-intro">
+        <p class="kicker dark">The complete collection</p>
+        <h1>Recipes</h1>
+        <p>Search, filter, sort, save, and plan from all of your collected recipes.</p>
+      </header>
+      <section class="filter-panel">
+        <label><span>Search recipes</span><input id="search" type="search" placeholder="Title, source, cuisine, or tag"></label>
+        <label><span>Ingredient search</span><input id="ingredientSearch" type="search" placeholder="Search your saved ingredient notes"></label>
+        <label><span>Category</span><select id="categoryFilter"><option value="">All categories</option></select></label>
+        <label><span>Protein</span><select id="proteinFilter"><option value="">All proteins</option></select></label>
+        <label><span>Sort</span><select id="sortFilter">
+          <option value="title">A–Z</option>
+          <option value="source">Source</option>
+          <option value="category">Category</option>
+          <option value="rating">My rating</option>
+        </select></label>
+        <button id="clearFilters" class="ghost-btn">Clear filters</button>
+      </section>
+      <div class="results-heading"><h2 id="recipeHeading">All recipes</h2><p id="recipeCount"></p></div>
+      <div id="recipeGrid" class="recipe-list"></div>
+      <div id="pager" class="pager"></div>
+      <div id="empty" class="empty hidden">No recipes match those filters.</div>
+    </section>
 
-<section id="favorites" class="view">
-  <div class="section-heading"><div><span class="eyebrow dark">Saved</span><h2>Favorite Recipes</h2></div></div>
-  <div id="favoriteGrid" class="recipe-grid"></div>
-</section>
+    <section id="favorites" class="view">
+      <header class="page-intro"><p class="kicker dark">Saved by you</p><h1>Favorites</h1><p>Your personal shortlist, stored privately on this device.</p></header>
+      <div id="favoriteGrid" class="recipe-list"></div>
+    </section>
 
-<section id="planner" class="view">
-  <div class="section-heading"><div><span class="eyebrow dark">Plan ahead</span><h2>Weekly Meal Planner</h2></div></div>
-  <div id="week" class="week"></div>
-</section>
+    <section id="planner" class="view">
+      <header class="page-intro"><p class="kicker dark">A calmer week</p><h1>Meal planner</h1><p>Choose one recipe for each day and keep dinner decisions in one place.</p></header>
+      <div id="week" class="week-grid"></div>
+    </section>
 
-<section id="shopping" class="view">
-  <div class="section-heading"><div><span class="eyebrow dark">For the week</span><h2>Shopping List</h2></div><button id="addShopping" class="primary-btn">Add Item</button></div>
-  <div id="shoppingRows"></div>
-</section>
-</main>
+    <section id="shopping" class="view">
+      <header class="page-intro shopping-intro"><div><p class="kicker dark">Ready for the store</p><h1>Shopping list</h1><p>A simple list that saves automatically on this device.</p></div><button id="addShopping" class="navy-btn">Add item</button></header>
+      <div id="shoppingRows" class="shopping-list"></div>
+    </section>
+  </main>
 
-<footer>Charlie’s Cookbook · Photography stored locally for reliable display</footer>
-<script src="recipes.js"></script>
-<script src="app.js"></script>
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <button data-view-link="home" class="active">Home</button>
+    <button data-view-link="recipes">Recipes</button>
+    <button data-view-link="favorites">Saved</button>
+    <button data-view-link="planner">Planner</button>
+    <button data-view-link="shopping">List</button>
+  </nav>
+
+  <footer>
+    <div><strong>Charlie’s Cookbook</strong><span>Our family’s recipes, gathered in one place.</span></div>
+    <button id="footerShareBtn" class="text-button light">Share cookbook →</button>
+  </footer>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="recipes.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
