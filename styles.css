@@ -142,3 +142,6 @@ footer{background:var(--navy);color:#dbe5ee;text-align:center;padding:24px;font-
   text-transform:uppercase;
   letter-spacing:.12em;
 }
+
+/* Local photography build */
+.card-thumb img,.featured-art img{background:#e9eef2}
