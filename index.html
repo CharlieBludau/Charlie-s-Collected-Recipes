@@ -1,174 +1,107 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0d2740">
-  <meta name="description" content="Charlie’s Cookbook — a curated family collection of favorite recipes.">
-  <meta property="og:title" content="Charlie’s Cookbook">
-  <meta property="og:description" content="Our family’s favorite recipes, gathered in one beautiful place.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="photos/hero.jpg">
-  <title>Charlie’s Cookbook</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/icon-192.svg">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102b42">
+<title>Charlie’s Collected Recipes</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand-lockup" href="#" data-view-link="home" aria-label="Charlie’s Cookbook home">
+<header class="hero">
+  <nav class="nav shell">
+    <a class="brand" href="#top" aria-label="Charlie’s Collected Recipes">
       <span class="brand-mark">C</span>
-      <span><strong>Charlie’s Cookbook</strong><small>A family recipe collection</small></span>
+      <span><strong>Charlie’s</strong><small>Collected Recipes</small></span>
     </a>
-    <nav class="desktop-nav" aria-label="Main navigation">
-      <button data-view-link="home" class="active">Home</button>
-      <button data-view-link="recipes">Recipes</button>
-      <button data-view-link="favorites">Favorites</button>
-      <button data-view-link="planner">Planner</button>
-      <button data-view-link="shopping">Shopping</button>
-    </nav>
-    <div class="header-actions">
-      <button id="shareBtn" class="ghost-btn">Share</button>
-      <button id="installBtn" class="outline-btn hidden">Install</button>
+    <div class="nav-actions">
+      <button class="ghost" id="surpriseTop">Surprise me</button>
+      <button class="ghost" id="favoritesTop">Favorites</button>
     </div>
-  </header>
-
-  <main>
-    <section id="home" class="view active">
-      <section class="hero">
-        <img src="photos/hero.jpg" alt="A welcoming family dining table">
-        <div class="hero-shade"></div>
-        <div class="hero-content">
-          <p class="kicker">Collected, cooked, and shared</p>
-          <h1>A beautiful answer to<br>“What’s for dinner?”</h1>
-          <p>Our family’s favorite recipes—organized for weeknights, weekends, celebrations, and everything in between.</p>
-          <div class="hero-search">
-            <input id="homeSearch" type="search" placeholder="Search chicken, pasta, soup, cabbage…">
-            <button id="homeSearchBtn" class="gold-btn">Search the collection</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="dashboard-strip">
-        <article><span id="recipeTotal">160</span><small>Collected recipes</small></article>
-        <article><span id="favoriteTotal">0</span><small>Your favorites</small></article>
-        <article><span id="ratingTotal">0</span><small>Recipes rated</small></article>
-        <button id="surpriseBtn"><small>Need an idea?</small><strong>Surprise me tonight →</strong></button>
-      </section>
-
-      <section class="editorial-feature">
-        <div class="feature-number">01</div>
-        <div class="feature-copy">
-          <p class="kicker dark">Tonight’s recommendation</p>
-          <h2 id="featuredTitle">Choosing something delicious…</h2>
-          <p id="featuredMeta"></p>
-          <div class="feature-actions">
-            <a id="featuredLink" class="navy-btn" target="_blank" rel="noopener">Open original recipe</a>
-            <button id="newFeatured" class="text-button">Choose another</button>
-          </div>
-        </div>
-        <div class="feature-note">
-          <span>Photography policy</span>
-          <p>Recipe cards never show an unrelated dish. A verified photo can be added later; until then, the editorial design stands on its own.</p>
-        </div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-heading">
-          <div><p class="kicker dark">Explore the collection</p><h2>Browse by category</h2></div>
-          <button class="text-button" data-view-link="recipes">View all recipes →</button>
-        </div>
-        <div id="categoryGrid" class="category-grid"></div>
-      </section>
-
-      <section id="continueSection" class="section-block hidden">
-        <div class="section-heading">
-          <div><p class="kicker dark">Pick up where you left off</p><h2>Continue cooking</h2></div>
-        </div>
-        <div id="continueGrid" class="editorial-grid"></div>
-      </section>
-
-      <section class="photo-feature">
-        <img src="photos/family-table.jpg" alt="Fresh family meal">
-        <div class="photo-feature-copy">
-          <p class="kicker">Curated for you</p>
-          <h2>Family table</h2>
-          <p>Comforting, dependable recipes worth making again.</p>
-        </div>
-      </section>
-      <section class="section-block compact-top">
-        <div id="familyGrid" class="editorial-grid"></div>
-      </section>
-
-      <section class="photo-feature reverse">
-        <img src="photos/seasonal.jpg" alt="Warm seasonal soup">
-        <div class="photo-feature-copy">
-          <p class="kicker">Newest additions</p>
-          <h2>Recently collected</h2>
-          <p>New ideas added to the family cookbook.</p>
-        </div>
-      </section>
-      <section class="section-block compact-top">
-        <div id="recentGrid" class="editorial-grid"></div>
-      </section>
-    </section>
-
-    <section id="recipes" class="view">
-      <header class="page-intro">
-        <p class="kicker dark">The complete collection</p>
-        <h1>Recipes</h1>
-        <p>Search, filter, sort, save, and plan from all of your collected recipes.</p>
-      </header>
-      <section class="filter-panel">
-        <label><span>Search recipes</span><input id="search" type="search" placeholder="Title, source, cuisine, or tag"></label>
-        <label><span>Ingredient search</span><input id="ingredientSearch" type="search" placeholder="Search your saved ingredient notes"></label>
-        <label><span>Category</span><select id="categoryFilter"><option value="">All categories</option></select></label>
-        <label><span>Protein</span><select id="proteinFilter"><option value="">All proteins</option></select></label>
-        <label><span>Sort</span><select id="sortFilter">
-          <option value="title">A–Z</option>
-          <option value="source">Source</option>
-          <option value="category">Category</option>
-          <option value="rating">My rating</option>
-        </select></label>
-        <button id="clearFilters" class="ghost-btn">Clear filters</button>
-      </section>
-      <div class="results-heading"><h2 id="recipeHeading">All recipes</h2><p id="recipeCount"></p></div>
-      <div id="recipeGrid" class="recipe-list"></div>
-      <div id="pager" class="pager"></div>
-      <div id="empty" class="empty hidden">No recipes match those filters.</div>
-    </section>
-
-    <section id="favorites" class="view">
-      <header class="page-intro"><p class="kicker dark">Saved by you</p><h1>Favorites</h1><p>Your personal shortlist, stored privately on this device.</p></header>
-      <div id="favoriteGrid" class="recipe-list"></div>
-    </section>
-
-    <section id="planner" class="view">
-      <header class="page-intro"><p class="kicker dark">A calmer week</p><h1>Meal planner</h1><p>Choose one recipe for each day and keep dinner decisions in one place.</p></header>
-      <div id="week" class="week-grid"></div>
-    </section>
-
-    <section id="shopping" class="view">
-      <header class="page-intro shopping-intro"><div><p class="kicker dark">Ready for the store</p><h1>Shopping list</h1><p>A simple list that saves automatically on this device.</p></div><button id="addShopping" class="navy-btn">Add item</button></header>
-      <div id="shoppingRows" class="shopping-list"></div>
-    </section>
-  </main>
-
-  <nav class="mobile-nav" aria-label="Mobile navigation">
-    <button data-view-link="home" class="active">Home</button>
-    <button data-view-link="recipes">Recipes</button>
-    <button data-view-link="favorites">Saved</button>
-    <button data-view-link="planner">Planner</button>
-    <button data-view-link="shopping">List</button>
   </nav>
+  <div class="hero-inner shell" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">A personal family collection</p>
+      <h1>Good food, saved<br>the right way.</h1>
+      <p class="lead">131 hand-picked recipes with the exact photographs you selected.</p>
+      <div class="hero-buttons">
+        <button class="primary" id="pickDinner">Pick tonight’s dinner</button>
+        <a class="secondary" href="#browse">Browse all recipes</a>
+      </div>
+    </div>
+    <button class="feature" id="featureCard" aria-label="Open featured recipe">
+      <img id="featureImage" alt="">
+      <span class="feature-shade"></span>
+      <span class="feature-copy">
+        <small>Tonight’s inspiration</small>
+        <strong id="featureTitle"></strong>
+        <em id="featureMeta"></em>
+      </span>
+    </button>
+  </div>
+</header>
 
-  <footer>
-    <div><strong>Charlie’s Cookbook</strong><span>Our family’s recipes, gathered in one place.</span></div>
-    <button id="footerShareBtn" class="text-button light">Share cookbook →</button>
-  </footer>
+<main>
+<section class="stats shell" aria-label="Cookbook statistics">
+  <div><strong id="recipeCount">131</strong><span>Recipes</span></div>
+  <div><strong id="favoriteCount">0</strong><span>Favorites</span></div>
+  <div><strong id="ratedCount">0</strong><span>Rated</span></div>
+  <div><strong id="videoCount">0</strong><span>Videos</span></div>
+</section>
 
-  <div id="toast" role="status" aria-live="polite"></div>
-  <script src="recipes.js"></script>
-  <script src="app.js"></script>
+<section class="collections shell">
+  <div class="section-head">
+    <div><p class="eyebrow">Browse by craving</p><h2>Collections</h2></div>
+    <button class="text-button" id="clearCollection">Show everything</button>
+  </div>
+  <div id="collectionChips" class="collection-chips"></div>
+</section>
+
+<section class="browse shell" id="browse">
+  <div class="section-head browse-head">
+    <div><p class="eyebrow">The complete collection</p><h2>All recipes</h2><p id="resultCount"></p></div>
+    <div class="view-switch">
+      <button id="gridView" class="active" title="Grid view">▦</button>
+      <button id="listView" title="List view">☰</button>
+    </div>
+  </div>
+  <div class="filters">
+    <label class="search"><span>⌕</span><input id="search" type="search" placeholder="Search recipes or sources…"></label>
+    <select id="categoryFilter"><option value="">All collections</option></select>
+    <select id="sourceFilter"><option value="">All sources</option></select>
+    <button id="favoritesOnly" class="filter-button">Favorites only</button>
+    <button id="clearFilters" class="text-button">Clear</button>
+  </div>
+  <div id="recipeGrid" class="recipe-grid"></div>
+  <div id="emptyState" class="empty hidden"><h3>No recipes found</h3><p>Try another search or clear the filters.</p></div>
+</section>
+</main>
+
+<dialog id="recipeDialog">
+  <button class="dialog-close" id="dialogClose" aria-label="Close">×</button>
+  <div class="dialog-image"><img id="dialogImage" alt=""></div>
+  <div class="dialog-body">
+    <p class="eyebrow" id="dialogMeta"></p>
+    <h2 id="dialogTitle"></h2>
+    <div class="dialog-buttons">
+      <a id="dialogOpen" class="primary" target="_blank" rel="noopener">Open original recipe</a>
+      <button id="dialogFavorite" class="secondary"></button>
+    </div>
+    <div class="personal">
+      <label><span>Your rating</span>
+        <select id="dialogRating">
+          <option value="">Not rated</option>
+          <option value="1">★</option><option value="2">★★</option><option value="3">★★★</option>
+          <option value="4">★★★★</option><option value="5">★★★★★</option>
+        </select>
+      </label>
+      <label><span>Your notes</span><textarea id="dialogNotes" placeholder="Substitutions, cooking notes, or what the family thought…"></textarea></label>
+    </div>
+  </div>
+</dialog>
+
+<footer><div class="shell">Charlie’s Collected Recipes · 131 recipes · Permanent photo edition</div></footer>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
