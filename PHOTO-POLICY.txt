@@ -1,6 +1,12 @@
 PHOTO POLICY
 
-1. No recipe card displays a generic stock image.
-2. No photo is presented as a specific recipe unless it has been verified for that recipe.
-3. The homepage photograph is atmospheric editorial imagery, not a recipe representation.
-4. Exact recipe photos can be added later through a verified image map.
+- Homepage and category photography uses unique Unsplash images.
+- No category image is reused for another category.
+- Recipe cards request the original source page's preview image.
+- If a recipe has no usable source preview, the card displays an elegant
+  navy no-photo treatment rather than repeating an unrelated food photo.
+- Adobe Stock images were not embedded because they require an active license
+  through the site owner's Adobe account.
+
+Unsplash License:
+https://unsplash.com/license

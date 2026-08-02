@@ -3,8 +3,8 @@
   "short_name": "Cookbook",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#fffdf9",
-  "theme_color": "#0d2740",
+  "background_color": "#fffdf8",
+  "theme_color": "#102a43",
   "icons": [
     {
       "src": "icons/icon-192.svg",

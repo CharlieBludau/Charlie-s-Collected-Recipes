@@ -1,58 +1,110 @@
+
 const RECIPES=window.RECIPES||[];
+const STOCK_PHOTOS={"Chicken": "photos/chicken.jpg", "Beef & Lamb": "photos/beef.jpg", "Pork": "photos/pork.jpg", "Seafood": "photos/seafood.jpg", "Vegetarian": "photos/vegetarian.jpg", "Soups & Stews": "photos/soup.jpg", "Salads & Sides": "photos/salad.jpg", "Pasta & Noodles": "photos/pasta.jpg", "Handhelds & Grilling": "photos/tacos.jpg", "Desserts": "photos/dessert.jpg", "Collections & Other": "photos/seafood.jpg", "Featured": "photos/featured.jpg"};
+
 const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const PAGE_SIZE=24;
-let currentPage=1;
 const state={
- favorites:JSON.parse(localStorage.getItem('cc_favorites')||'[]'),
- ratings:JSON.parse(localStorage.getItem('cc_ratings')||'{}'),
- ingredients:JSON.parse(localStorage.getItem('cc_ingredients')||'{}'),
- planner:JSON.parse(localStorage.getItem('cc_planner')||'{}'),
- shopping:JSON.parse(localStorage.getItem('cc_shopping')||'[]'),
- recent:JSON.parse(localStorage.getItem('cc_recent')||'[]')
+favorites:JSON.parse(localStorage.getItem('cc_favorites')||'[]'),
+notes:JSON.parse(localStorage.getItem('cc_notes')||'{}'),
+ratings:JSON.parse(localStorage.getItem('cc_ratings')||'{}'),
+ingredients:JSON.parse(localStorage.getItem('cc_ingredients')||'{}'),
+planner:JSON.parse(localStorage.getItem('cc_planner')||'{}'),
+shopping:JSON.parse(localStorage.getItem('cc_shopping')||'[]'),
+recent:JSON.parse(localStorage.getItem('cc_recent')||'[]')
 };
-const $=id=>document.getElementById(id);
-function save(){localStorage.setItem('cc_favorites',JSON.stringify(state.favorites));localStorage.setItem('cc_ratings',JSON.stringify(state.ratings));localStorage.setItem('cc_ingredients',JSON.stringify(state.ingredients));localStorage.setItem('cc_planner',JSON.stringify(state.planner));localStorage.setItem('cc_shopping',JSON.stringify(state.shopping));localStorage.setItem('cc_recent',JSON.stringify(state.recent));updateStats()}
-function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function toast(message){$('toast').textContent=message;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
-function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('[data-view-link]').forEach(b=>b.classList.toggle('active',b.dataset.viewLink===id));if(id==='favorites')renderFavorites();if(id==='planner')renderPlanner();if(id==='shopping')renderShopping();window.scrollTo({top:0,behavior:'smooth'})}
-document.querySelectorAll('[data-view-link]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();showView(el.dataset.viewLink)}));
-function categoryIndex(i){return String(i+1).padStart(2,'0')}
-function card(r,i=0){const fav=state.favorites.includes(r.id);return `<article class="editorial-card">
- <div class="card-number">${categoryIndex(i)}</div>
- <div class="card-tags">${[r.category,...r.tags.slice(0,2)].map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div>
- <h3>${esc(r.title)}</h3><div class="source">${esc(r.source)} · ${esc(r.protein)}</div>
- <div class="card-footer"><a class="open-link" href="${esc(r.url)}" target="_blank" rel="noopener" data-open="${r.id}">Open recipe →</a>
- <div><button class="star-btn ${fav?'active':''}" data-favorite="${r.id}" aria-label="Favorite">${fav?'★':'☆'}</button>
- <button class="plus-btn" data-plan="${r.id}" aria-label="Add to planner">+</button></div></div></article>`}
-function row(r,i){const fav=state.favorites.includes(r.id),rating=state.ratings[r.id]||'';return `<article class="recipe-row">
- <div class="row-index">${String(i+1).padStart(2,'0')}</div>
- <div><h3>${esc(r.title)}</h3><div class="row-meta">${esc(r.protein)} · ${esc(r.tags.join(', '))}</div></div>
- <div class="row-source">${esc(r.source)}</div><div class="row-category">${esc(r.category)}</div>
- <div class="row-rating"><select class="rating-select" data-rating="${r.id}"><option value="">Rate</option>${[1,2,3,4,5].map(n=>`<option value="${n}" ${String(rating)===String(n)?'selected':''}>${'★'.repeat(n)}</option>`).join('')}</select></div>
- <div class="row-actions"><a class="open-link" href="${esc(r.url)}" target="_blank" rel="noopener" data-open="${r.id}">Open</a><button class="star-btn ${fav?'active':''}" data-favorite="${r.id}">${fav?'★':'☆'}</button><button class="plus-btn" data-plan="${r.id}">+</button></div></article>`}
-function bind(root=document){root.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',()=>trackRecent(Number(a.dataset.open))));root.querySelectorAll('[data-favorite]').forEach(b=>b.addEventListener('click',()=>toggleFavorite(Number(b.dataset.favorite))));root.querySelectorAll('[data-plan]').forEach(b=>b.addEventListener('click',()=>addToPlanner(Number(b.dataset.plan))));root.querySelectorAll('[data-rating]').forEach(s=>s.addEventListener('change',()=>{state.ratings[s.dataset.rating]=s.value;save()}))}
-function trackRecent(id){state.recent=[id,...state.recent.filter(x=>x!==id)].slice(0,4);save();renderContinue()}
-function toggleFavorite(id){state.favorites=state.favorites.includes(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];save();renderHome();renderRecipes();if($('favorites').classList.contains('active'))renderFavorites()}
-function addToPlanner(id){const day=prompt('Add to which day? Monday through Sunday');if(!day)return;const proper=DAYS.find(d=>d.toLowerCase()===day.trim().toLowerCase());if(!proper){toast('Please enter a day from Monday to Sunday.');return}state.planner[proper]=id;save();toast(`Added to ${proper}`)}
-function updateStats(){$('recipeTotal').textContent=RECIPES.length;$('favoriteTotal').textContent=state.favorites.length;$('ratingTotal').textContent=Object.values(state.ratings).filter(Boolean).length}
+function save(){localStorage.setItem('cc_favorites',JSON.stringify(state.favorites));localStorage.setItem('cc_notes',JSON.stringify(state.notes));localStorage.setItem('cc_ratings',JSON.stringify(state.ratings));localStorage.setItem('cc_ingredients',JSON.stringify(state.ingredients));localStorage.setItem('cc_planner',JSON.stringify(state.planner));localStorage.setItem('cc_shopping',JSON.stringify(state.shopping));localStorage.setItem('cc_recent',JSON.stringify(state.recent))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+function artForCategory(category){
+  const map={
+    'Chicken':'art/chicken.svg',
+    'Beef & Lamb':'art/beef-lamb.svg',
+    'Pork':'art/pork.svg',
+    'Seafood':'art/seafood.svg',
+    'Vegetarian':'art/vegetarian.svg',
+    'Soups & Stews':'art/soups-stews.svg',
+    'Salads & Sides':'art/salads-sides.svg',
+    'Pasta & Noodles':'art/pasta-noodles.svg',
+    'Handhelds & Grilling':'art/handhelds-grilling.svg',
+    'Desserts':'art/desserts.svg',
+    'Collections & Other':'art/collections-other.svg'
+  };
+  return map[category]||'art/featured.svg';
+}
+
+
+
+const RECIPE_PHOTO_POOL=[
+  'photos/chicken.jpg','photos/beef.jpg','photos/pork.jpg','photos/seafood.jpg','photos/vegetarian.jpg',
+  'photos/soup.jpg','photos/salad.jpg','photos/pasta.jpg','photos/tacos.jpg','photos/dessert.jpg','photos/featured.jpg'
+];
+function recipePhoto(r){return RECIPE_PHOTO_POOL[(Number(r.id)-1)%RECIPE_PHOTO_POOL.length]}
+
+function photoForCategory(category){
+  return STOCK_PHOTOS[category] || STOCK_PHOTOS["Collections & Other"];
+}
+function bindPhotoFallbacks(root=document){
+  root.querySelectorAll('img[data-photo-fallback]').forEach(img=>{
+    img.addEventListener('error',()=>{
+      if(img.dataset.didFallback!=='1'){
+        img.dataset.didFallback='1';
+        img.src=img.dataset.photoFallback;
+      }
+    },{once:true});
+  });
+}
+
+function recipeCard(r){const fav=state.favorites.includes(r.id),note=state.notes[r.id]||'',rating=state.ratings[r.id]||'',ings=state.ingredients[r.id]||'';return `<article class="card"><div class="card-thumb"><img src="${recipePhoto(r)}" loading="lazy" alt="${esc(r.title)} food photograph"></div><div class="card-main"><div class="badges">${[r.category,...r.tags.slice(0,2)].map(x=>`<span class="badge">${esc(x)}</span>`).join('')}</div><h3>${esc(r.title)}</h3><div class="source">${esc(r.source)} · ${esc(r.protein)}</div></div><div class="actions"><a class="open" href="${esc(r.url)}" target="_blank" rel="noopener" data-open="${r.id}">Open Recipe ↗</a><button class="icon-btn ${fav?'active':''}" data-favorite="${r.id}">${fav?'★':'☆'}</button><button class="icon-btn" data-plan="${r.id}">＋</button></div><details><summary>Notes, ingredients, and rating</summary><textarea placeholder="My notes…" data-note="${r.id}">${esc(note)}</textarea><textarea placeholder="Searchable ingredients, separated by commas…" data-ingredients="${r.id}">${esc(ings)}</textarea><div class="rating-row"><label>Rating</label><select data-rating="${r.id}"><option value="">Not rated</option>${[1,2,3,4,5].map(n=>`<option value="${n}" ${String(rating)===String(n)?'selected':''}>${'★'.repeat(n)}</option>`).join('')}</select></div></details></article>`}
+function bindCards(root=document){root.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',()=>trackRecent(Number(a.dataset.open))));root.querySelectorAll('[data-favorite]').forEach(b=>b.addEventListener('click',()=>toggleFavorite(Number(b.dataset.favorite))));root.querySelectorAll('[data-plan]').forEach(b=>b.addEventListener('click',()=>addToPlannerPrompt(Number(b.dataset.plan))));root.querySelectorAll('[data-note]').forEach(el=>el.addEventListener('input',()=>{state.notes[el.dataset.note]=el.value;save()}));root.querySelectorAll('[data-ingredients]').forEach(el=>el.addEventListener('input',()=>{state.ingredients[el.dataset.ingredients]=el.value;save()}));root.querySelectorAll('[data-rating]').forEach(el=>el.addEventListener('change',()=>{state.ratings[el.dataset.rating]=el.value;save()}))}
+
+function trackRecent(id){
+  state.recent=[id,...state.recent.filter(x=>x!==id)].slice(0,4);
+  save();
+  renderContinue();
+}
+function renderContinue(){
+  const items=state.recent.map(id=>RECIPES.find(r=>r.id===id)).filter(Boolean);
+  continueSection.classList.toggle('hidden',items.length===0);
+  continueGrid.innerHTML=items.map(recipeCard).join('');
+  bindCards(continueGrid);
+}
+function categoryIcon(category){
+  const icons={
+    'Chicken':'🍗','Beef & Lamb':'🥩','Pork':'🐖','Seafood':'🐟',
+    'Vegetarian':'🥬','Soups & Stews':'🥣','Salads & Sides':'🥗',
+    'Pasta & Noodles':'🍝','Handhelds & Grilling':'🌮',
+    'Desserts':'🍰','Collections & Other':'📚'
+  };
+  return icons[category]||'🍽️';
+}
+
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.main-nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(id==='favorites')renderFavorites();if(id==='planner')renderPlanner();if(id==='shopping')renderShopping();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.main-nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));document.querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.jump)));
+function setFeatured(r){featuredTitle.textContent=r.title;featuredMeta.textContent=`${r.source} · ${r.category}`;featuredLink.href=r.url;featuredLink.dataset.featuredId=r.id;featuredImage.src=recipePhoto(r);featuredImage.alt=`${r.title} food photograph`}
 function randomRecipe(){const pool=state.favorites.length?RECIPES.filter(r=>state.favorites.includes(r.id)):RECIPES;return pool[Math.floor(Math.random()*pool.length)]}
-function setFeatured(r){$('featuredTitle').textContent=r.title;$('featuredMeta').textContent=`${r.source} · ${r.category} · ${r.protein}`;$('featuredLink').href=r.url;$('featuredLink').dataset.open=r.id}
-function renderHome(){const counts={};RECIPES.forEach(r=>counts[r.category]=(counts[r.category]||0)+1);$('categoryGrid').innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([c,n],i)=>`<button class="category-card" data-category="${esc(c)}"><span class="cat-index">${categoryIndex(i)}</span><span><strong>${esc(c)}</strong><span>${n} recipes</span></span></button>`).join('');$('categoryGrid').querySelectorAll('[data-category]').forEach(b=>b.addEventListener('click',()=>{showView('recipes');$('categoryFilter').value=b.dataset.category;currentPage=1;renderRecipes()}));
- const family=RECIPES.filter(r=>['Chicken','Handhelds & Grilling','Soups & Stews','Pasta & Noodles'].includes(r.category)).slice(0,4);
- $('familyGrid').innerHTML=family.map(card).join('');bind($('familyGrid'));
- const recent=RECIPES.slice(-4).reverse();$('recentGrid').innerHTML=recent.map(card).join('');bind($('recentGrid'));
- if(!$('featuredLink').href)setFeatured(RECIPES[0]);renderContinue();updateStats()}
-function renderContinue(){const items=state.recent.map(id=>RECIPES.find(r=>r.id===id)).filter(Boolean);$('continueSection').classList.toggle('hidden',!items.length);$('continueGrid').innerHTML=items.map(card).join('');bind($('continueGrid'))}
-function getFiltered(){const q=$('search').value.trim().toLowerCase(),iq=$('ingredientSearch').value.trim().toLowerCase(),cat=$('categoryFilter').value,protein=$('proteinFilter').value;let items=RECIPES.filter(r=>{const hay=[r.title,r.source,r.category,r.protein,...r.tags].join(' ').toLowerCase();const ih=[r.title,...r.tags,state.ingredients[r.id]||''].join(' ').toLowerCase();return(!q||hay.includes(q))&&(!iq||ih.includes(iq))&&(!cat||r.category===cat)&&(!protein||r.protein===protein)});const sort=$('sortFilter').value;items.sort((a,b)=>sort==='rating'?(Number(state.ratings[b.id]||0)-Number(state.ratings[a.id]||0)):String(a[sort]||'').localeCompare(String(b[sort]||'')));return items}
-function renderRecipes(){const items=getFiltered(),pages=Math.max(1,Math.ceil(items.length/PAGE_SIZE));currentPage=Math.min(currentPage,pages);const pageItems=items.slice((currentPage-1)*PAGE_SIZE,currentPage*PAGE_SIZE);$('recipeGrid').innerHTML=pageItems.map((r,i)=>row(r,(currentPage-1)*PAGE_SIZE+i)).join('');$('recipeCount').textContent=`${items.length} recipes · Page ${currentPage} of ${pages}`;$('empty').classList.toggle('hidden',!!items.length);$('pager').innerHTML=pages<=1?'':`<button id="prevPage" ${currentPage===1?'disabled':''}>Previous</button><span>Page ${currentPage} of ${pages}</span><button id="nextPage" ${currentPage===pages?'disabled':''}>Next</button>`;bind($('recipeGrid'));$('prevPage')?.addEventListener('click',()=>{currentPage--;renderRecipes();window.scrollTo({top:250,behavior:'smooth'})});$('nextPage')?.addEventListener('click',()=>{currentPage++;renderRecipes();window.scrollTo({top:250,behavior:'smooth'})})}
-function renderFavorites(){const items=RECIPES.filter(r=>state.favorites.includes(r.id));$('favoriteGrid').innerHTML=items.length?items.map(row).join(''):'<div class="empty">No favorites yet. Select ☆ beside any recipe.</div>';bind($('favoriteGrid'))}
-function renderPlanner(){$('week').innerHTML=DAYS.map(day=>{const id=state.planner[day]||'',r=RECIPES.find(x=>String(x.id)===String(id));return `<article class="day-card"><h3>${day}</h3><select data-day="${day}"><option value="">Choose a recipe</option>${RECIPES.map(x=>`<option value="${x.id}" ${String(x.id)===String(id)?'selected':''}>${esc(x.title)}</option>`).join('')}</select>${r?`<a href="${esc(r.url)}" target="_blank" rel="noopener">Open ${esc(r.title)} →</a>`:''}</article>`}).join('');$('week').querySelectorAll('[data-day]').forEach(s=>s.addEventListener('change',()=>{state.planner[s.dataset.day]=s.value;save();renderPlanner()}))}
-function renderShopping(){$('shoppingRows').innerHTML=state.shopping.length?state.shopping.map((x,i)=>`<div class="shop-row"><input type="checkbox" ${x.done?'checked':''} data-done="${i}"><input type="text" value="${esc(x.item||'')}" placeholder="Item" data-item="${i}"><input class="qty" type="text" value="${esc(x.qty||'')}" placeholder="Quantity" data-qty="${i}"><button data-remove="${i}">Remove</button></div>`).join(''):'<div class="empty">Your shopping list is empty.</div>';$('shoppingRows').querySelectorAll('[data-done]').forEach(e=>e.addEventListener('change',()=>{state.shopping[e.dataset.done].done=e.checked;save()}));$('shoppingRows').querySelectorAll('[data-item]').forEach(e=>e.addEventListener('input',()=>{state.shopping[e.dataset.item].item=e.value;save()}));$('shoppingRows').querySelectorAll('[data-qty]').forEach(e=>e.addEventListener('input',()=>{state.shopping[e.dataset.qty].qty=e.value;save()}));$('shoppingRows').querySelectorAll('[data-remove]').forEach(e=>e.addEventListener('click',()=>{state.shopping.splice(Number(e.dataset.remove),1);save();renderShopping()}))}
-function shareCookbook(){const url=location.href.split('#')[0];if(navigator.share){navigator.share({title:"Charlie’s Cookbook",text:"Our family’s collected recipes",url}).catch(()=>{})}else{window.location.href=`mailto:?subject=${encodeURIComponent("Charlie’s Cookbook")}&body=${encodeURIComponent("Here is Charlie’s Cookbook:\n\n"+url)}`}}
-[...new Set(RECIPES.map(r=>r.category))].sort().forEach(v=>$('categoryFilter').add(new Option(v,v)));[...new Set(RECIPES.map(r=>r.protein))].sort().forEach(v=>$('proteinFilter').add(new Option(v,v)));
-['search','ingredientSearch'].forEach(id=>$(id).addEventListener('input',()=>{currentPage=1;renderRecipes()}));['categoryFilter','proteinFilter','sortFilter'].forEach(id=>$(id).addEventListener('change',()=>{currentPage=1;renderRecipes()}));$('clearFilters').addEventListener('click',()=>{$('search').value='';$('ingredientSearch').value='';$('categoryFilter').value='';$('proteinFilter').value='';$('sortFilter').value='title';currentPage=1;renderRecipes()});
-function runHomeSearch(){showView('recipes');$('search').value=$('homeSearch').value;currentPage=1;renderRecipes()}$('homeSearchBtn').addEventListener('click',runHomeSearch);$('homeSearch').addEventListener('keydown',e=>{if(e.key==='Enter')runHomeSearch()});
-$('surpriseBtn').addEventListener('click',()=>{setFeatured(randomRecipe());window.scrollTo({top:document.querySelector('.editorial-feature').offsetTop-100,behavior:'smooth'})});$('newFeatured').addEventListener('click',()=>setFeatured(randomRecipe()));$('featuredLink').addEventListener('click',()=>trackRecent(Number($('featuredLink').dataset.open)));$('shareBtn').addEventListener('click',shareCookbook);$('footerShareBtn').addEventListener('click',shareCookbook);$('addShopping').addEventListener('click',()=>{state.shopping.push({item:'',qty:'',done:false});save();renderShopping()});
-let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('installBtn').classList.remove('hidden')});$('installBtn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$('installBtn').classList.add('hidden')});
+function renderHome(){const counts={};RECIPES.forEach(r=>counts[r.category]=(counts[r.category]||0)+1);categoryGrid.innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`<button class="category-card" data-category="${esc(c)}" style="background-image:url('${photoForCategory(c)}')"><strong>${esc(c)}</strong><span>${n} recipes</span></button>`).join('');categoryGrid.querySelectorAll('[data-category]').forEach(b=>b.addEventListener('click',()=>{showView('recipes');categoryFilter.value=b.dataset.category;renderRecipes()}));recentGrid.innerHTML=RECIPES.slice(-4).reverse().map(recipeCard).join('');bindCards(recentGrid);
+  const familyPool=RECIPES.filter(r=>['Chicken','Handhelds & Grilling','Soups & Stews','Pasta & Noodles'].includes(r.category)).slice(0,4);
+  familyFavoritesGrid.innerHTML=familyPool.map(recipeCard).join('');bindCards(familyFavoritesGrid);
+  const seasonalPool=RECIPES.filter(r=>['Soups & Stews','Pork','Beef & Lamb','Desserts'].includes(r.category)).slice(0,4);
+  seasonalGrid.innerHTML=seasonalPool.map(recipeCard).join('');bindCards(seasonalGrid);
+  if(RECIPES.length)setFeatured(RECIPES[0])}
+function renderRecipes(){const q=search.value.trim().toLowerCase(),iq=ingredientSearch.value.trim().toLowerCase();const filtered=RECIPES.filter(r=>{const hay=[r.title,r.source,r.category,r.protein,...r.tags].join(' ').toLowerCase();const ih=[r.title,...r.tags,state.ingredients[r.id]||''].join(' ').toLowerCase();return(!q||hay.includes(q))&&(!iq||ih.includes(iq))&&(!categoryFilter.value||r.category===categoryFilter.value)&&(!proteinFilter.value||r.protein===proteinFilter.value)});recipeGrid.innerHTML=filtered.map(recipeCard).join('');recipeCount.textContent=`${filtered.length} recipe${filtered.length===1?'':'s'}`;empty.style.display=filtered.length?'none':'block';bindCards(recipeGrid)}
+function renderFavorites(){const f=RECIPES.filter(r=>state.favorites.includes(r.id));favoriteGrid.innerHTML=f.length?f.map(recipeCard).join(''):'<div class="empty" style="display:block">No favorites yet. Click ☆ on any recipe.</div>';bindCards(favoriteGrid)}
+function toggleFavorite(id){state.favorites=state.favorites.includes(id)?state.favorites.filter(x=>x!==id):[...state.favorites,id];save();renderRecipes();renderHome();if(document.getElementById('favorites').classList.contains('active'))renderFavorites()}
+function addToPlannerPrompt(id){const day=prompt('Add to which day? Monday–Sunday');if(day&&DAYS.map(x=>x.toLowerCase()).includes(day.toLowerCase())){const proper=DAYS.find(x=>x.toLowerCase()===day.toLowerCase());state.planner[proper]=id;save();alert('Added to '+proper)}}
+function renderPlanner(){week.innerHTML=DAYS.map(d=>{const cur=state.planner[d]||'',recipe=RECIPES.find(r=>String(r.id)===String(cur));return `<div class="day"><h3>${d}</h3><select data-day="${d}"><option value="">Choose recipe</option>${RECIPES.map(r=>`<option value="${r.id}" ${String(cur)===String(r.id)?'selected':''}>${esc(r.title)}</option>`).join('')}</select>${recipe?`<p><a href="${recipe.url}" target="_blank">Open recipe ↗</a></p>`:''}</div>`}).join('');week.querySelectorAll('[data-day]').forEach(s=>s.addEventListener('change',()=>{state.planner[s.dataset.day]=s.value;save();renderPlanner()}))}
+function renderShopping(){shoppingRows.innerHTML=state.shopping.length?state.shopping.map((x,i)=>`<div class="shop-row"><input type="checkbox" ${x.done?'checked':''} data-shop-done="${i}"><input value="${esc(x.item||'')}" placeholder="Item" data-shop-item="${i}"><input value="${esc(x.qty||'')}" placeholder="Quantity" data-shop-qty="${i}"><button data-shop-remove="${i}">Remove</button></div>`).join(''):'<div class="empty" style="display:block">No items yet.</div>';shoppingRows.querySelectorAll('[data-shop-done]').forEach(e=>e.addEventListener('change',()=>{state.shopping[e.dataset.shopDone].done=e.checked;save()}));shoppingRows.querySelectorAll('[data-shop-item]').forEach(e=>e.addEventListener('input',()=>{state.shopping[e.dataset.shopItem].item=e.value;save()}));shoppingRows.querySelectorAll('[data-shop-qty]').forEach(e=>e.addEventListener('input',()=>{state.shopping[e.dataset.shopQty].qty=e.value;save()}));shoppingRows.querySelectorAll('[data-shop-remove]').forEach(e=>e.addEventListener('click',()=>{state.shopping.splice(Number(e.dataset.shopRemove),1);save();renderShopping()}))}
+[...new Set(RECIPES.map(r=>r.category))].sort().forEach(v=>categoryFilter.add(new Option(v,v)));[...new Set(RECIPES.map(r=>r.protein))].sort().forEach(v=>proteinFilter.add(new Option(v,v)));
+search.addEventListener('input',renderRecipes);ingredientSearch.addEventListener('input',renderRecipes);categoryFilter.addEventListener('change',renderRecipes);proteinFilter.addEventListener('change',renderRecipes);clearFilters.addEventListener('click',()=>{search.value='';ingredientSearch.value='';categoryFilter.value='';proteinFilter.value='';renderRecipes()});newFeatured.addEventListener('click',()=>setFeatured(randomRecipe()));tonightBtn.addEventListener('click',()=>{const r=randomRecipe();setFeatured(r);window.scrollTo({top:0,behavior:'smooth'})});addShopping.addEventListener('click',()=>{state.shopping.push({item:'',qty:'',done:false});save();renderShopping()});
+let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;installBtn.classList.remove('hidden')});installBtn.addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;installBtn.classList.add('hidden')});
 if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js'));
-setFeatured(RECIPES[0]);renderHome();renderRecipes();renderPlanner();renderShopping();
+featuredLink.addEventListener('click',()=>{if(featuredLink.dataset.featuredId)trackRecent(Number(featuredLink.dataset.featuredId))});
+function runHomeSearch(){
+  const q=homeSearch.value.trim();
+  showView('recipes');
+  search.value=q;
+  renderRecipes();
+}
+homeSearchBtn.addEventListener('click',runHomeSearch);
+homeSearch.addEventListener('keydown',e=>{if(e.key==='Enter')runHomeSearch()});
+renderHome();renderContinue();renderRecipes();renderPlanner();renderShopping();

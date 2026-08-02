@@ -1,1 +1,1 @@
-Upload every file and both folders (icons and photos) to the root of the GitHub repository. This luxury editorial version intentionally does not show generic or mismatched images on recipe cards. Only the general homepage hero uses photography. Exact recipe photos can be assigned later only after verification.
+Upload every file and the art, icons, and photos folders. This build stores all visible food photographs locally, so images do not depend on external websites or APIs. Replace existing files, commit, wait for GitHub Pages, then press Ctrl+Shift+R.
