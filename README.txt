@@ -1,1 +1,1 @@
-Upload every file and both folders (icons and photos) to the root of the GitHub repository. This luxury editorial version intentionally does not show generic or mismatched images on recipe cards. Only the general homepage hero uses photography. Exact recipe photos can be assigned later only after verification.
+Upload every file and both folders (icons and photos). This version restores real photography to the category tiles and editorial feature sections. Individual recipe cards remain photo-free unless an exact image has been verified for that recipe.
