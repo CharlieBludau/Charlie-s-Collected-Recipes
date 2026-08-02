@@ -1,5 +1,4 @@
 const RECIPES=window.RECIPES||[];
-const CATEGORY_PHOTOS={"Chicken": "photos/chicken.jpg", "Beef & Lamb": "photos/beef.jpg", "Pork": "photos/pork.jpg", "Seafood": "photos/seafood.jpg", "Vegetarian": "photos/vegetarian.jpg", "Soups & Stews": "photos/soup.jpg", "Salads & Sides": "photos/salad.jpg", "Pasta & Noodles": "photos/pasta.jpg", "Handhelds & Grilling": "photos/tacos.jpg", "Desserts": "photos/dessert.jpg", "Collections & Other": "photos/featured.jpg"};
 const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const PAGE_SIZE=24;
 let currentPage=1;
@@ -38,7 +37,7 @@ function addToPlanner(id){const day=prompt('Add to which day? Monday through Sun
 function updateStats(){$('recipeTotal').textContent=RECIPES.length;$('favoriteTotal').textContent=state.favorites.length;$('ratingTotal').textContent=Object.values(state.ratings).filter(Boolean).length}
 function randomRecipe(){const pool=state.favorites.length?RECIPES.filter(r=>state.favorites.includes(r.id)):RECIPES;return pool[Math.floor(Math.random()*pool.length)]}
 function setFeatured(r){$('featuredTitle').textContent=r.title;$('featuredMeta').textContent=`${r.source} · ${r.category} · ${r.protein}`;$('featuredLink').href=r.url;$('featuredLink').dataset.open=r.id}
-function renderHome(){const counts={};RECIPES.forEach(r=>counts[r.category]=(counts[r.category]||0)+1);$('categoryGrid').innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([c,n],i)=>`<button class="category-card" data-category="${esc(c)}" style="background-image:url('${CATEGORY_PHOTOS[c]||CATEGORY_PHOTOS['Collections & Other']}')"><span class="cat-overlay"></span><span class="cat-index">${categoryIndex(i)}</span><span class="cat-label"><strong>${esc(c)}</strong><span>${n} recipes</span></span></button>`).join('');$('categoryGrid').querySelectorAll('[data-category]').forEach(b=>b.addEventListener('click',()=>{showView('recipes');$('categoryFilter').value=b.dataset.category;currentPage=1;renderRecipes()}));
+function renderHome(){const counts={};RECIPES.forEach(r=>counts[r.category]=(counts[r.category]||0)+1);$('categoryGrid').innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([c,n],i)=>`<button class="category-card" data-category="${esc(c)}"><span class="cat-index">${categoryIndex(i)}</span><span><strong>${esc(c)}</strong><span>${n} recipes</span></span></button>`).join('');$('categoryGrid').querySelectorAll('[data-category]').forEach(b=>b.addEventListener('click',()=>{showView('recipes');$('categoryFilter').value=b.dataset.category;currentPage=1;renderRecipes()}));
  const family=RECIPES.filter(r=>['Chicken','Handhelds & Grilling','Soups & Stews','Pasta & Noodles'].includes(r.category)).slice(0,4);
  $('familyGrid').innerHTML=family.map(card).join('');bind($('familyGrid'));
  const recent=RECIPES.slice(-4).reverse();$('recentGrid').innerHTML=recent.map(card).join('');bind($('recentGrid'));
